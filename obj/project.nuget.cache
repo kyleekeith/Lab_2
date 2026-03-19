@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "f4XsgjzOUxk=",
+  "success": true,
+  "projectFilePath": "/Users/sogolmaghzian/Documents/Lab_2/Lab_2.csproj",
+  "expectedPackageFiles": [
+    "/Users/sogolmaghzian/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/sogolmaghzian/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.22/microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/sogolmaghzian/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.22/microsoft.netcore.app.host.osx-arm64.8.0.22.nupkg.sha512"
+  ],
+  "logs": []
+}

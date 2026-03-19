@@ -1,0 +1,5 @@
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.AssemblyInfoInputs.cache
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.AssemblyInfo.cs
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.csproj.CoreCompileInputs.cache
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.sourcelink.json
