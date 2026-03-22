@@ -58,10 +58,11 @@ public class AverageRatingRecommender
     private double AverageForBook(string isbn)
     {
         var ratings = _ratingRepository.GetAll()
-            .Where(r =. r.ISBN == isbn)
+            .Where(r => r.ISBN == isbn)
             .ToList();
 
-        if (ratings.Count == 0) return 0;
+        if (ratings.Count == 0)
+            return 0;
 
         return ratings.Average(r => (int)r.Value);
     }
