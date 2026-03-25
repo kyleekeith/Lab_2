@@ -200,12 +200,8 @@ namespace Lab_2
             Console.Write("Enter the title of the new book: ");
             string title = Console.ReadLine() ?? "";
 
-            Console.Write("Enter the year of the new book: ");
-            int year;
-            while (!int.TryParse(Console.ReadLine(), out year))
-            {
-                Console.Write("Invalid year. Enter a number: ");
-            }
+            Console.Write("Enter the year (or range of years) of the new book: ");
+			string year = Console.ReadLine() ?? "";
 
             string isbn = GenerateNextBookId();
             var book = new Book(isbn, author, title, year);
@@ -389,17 +385,15 @@ namespace Lab_2
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                string[] parts = line.Split(',');
+                string[] parts = line.Split(',', 3);
 
                 if (parts.Length < 3)
                     continue;
 
                 string author = parts[0].Trim();
                 string title = parts[1].Trim();
-                int year;
-                if (!int.TryParse(parts[2].Trim(), out year))
-                    continue;
-
+                string year = parts[2].Trim();
+                              
                 string isbn = GenerateNextBookId();
                 var book = new Book(isbn, author, title, year);
                 bookRepo.AddBook(book);
@@ -420,36 +414,43 @@ namespace Lab_2
 
             string[] lines = File.ReadAllLines(fileName);
             var books = bookRepo.GetAll();
-
-            foreach (string line in lines)
+            int i = 0;
+            while (i < lines.Length)
             {
-                if (string.IsNullOrWhiteSpace(line))
+                // Skip blank lines
+                if (string.IsNullOrWhiteSpace(lines[i])) { i++; continue; }
+ 
+                string memberName = lines[i].Trim();
+                i++;
+ 
+                // Skip blank lines between name and ratings
+                while (i < lines.Length && string.IsNullOrWhiteSpace(lines[i])) i++;
+                if (i >= lines.Length) break;
+ 
+                string ratingsLine = lines[i].Trim();
+                i++;
+ 
+                // Safety check: if this line doesn't look like ratings, treat it as
+                // the next member name and back up
+                if (!char.IsDigit(ratingsLine[0]) && ratingsLine[0] != '-')
+                {
+                    i--;
                     continue;
-
-                string[] parts = line.Split(',');
-
-                if (parts.Length < 2)
-                    continue;
-
-                string memberName = parts[0].Trim();
+                }
+ 
                 string accountId = GenerateNextMemberId();
-
-                var member = new Member(accountId, memberName);
-                memberRepo.Add(member);
-
-                for (int i = 0; i < books.Count; i++)
+                memberRepo.Add(new Member(accountId, memberName));
+ 
+                string[] ratingParts = ratingsLine.Split(' ');
+                for (int j = 0; j < books.Count; j++)
                 {
                     int ratingValue = 0;
-
-                    if (i + 1 < parts.Length)
+                    if (j < ratingParts.Length)
                     {
-                        int.TryParse(parts[i + 1].Trim(), out ratingValue);
-
-                        if (!IsValidRating(ratingValue))
-                            ratingValue = 0;
+                        int.TryParse(ratingParts[j].Trim(), out ratingValue);
+                        if (!IsValidRating(ratingValue)) ratingValue = 0;
                     }
-
-                    ratingRepo.Add(new Rating(accountId, books[i].ISBN, (RatingValue)ratingValue));
+                    ratingRepo.Add(new Rating(accountId, books[j].ISBN, (RatingValue)ratingValue));
                 }
             }
         }

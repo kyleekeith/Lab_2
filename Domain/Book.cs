@@ -22,7 +22,7 @@ public class Book
     /// <summary>
     /// year the book was published
     /// </summary>
-    public int Year {  get; private set; }
+    public string Year {  get; private set; }
 
     /// <summary>
     /// book instance
@@ -31,7 +31,7 @@ public class Book
     /// <param name="author"></param>
     /// <param name="title"></param>
     /// <param name="year"></param>
-    public Book(string isbn, string author, string title, int year)
+    public Book(string isbn, string author, string title, string year)
     {
         ISBN = isbn;
         Author = author;
@@ -53,7 +53,7 @@ public class Book
             throw new Exception("Author is required");
         if (string.IsNullOrWhiteSpace(Title))
             throw new Exception("Title is required");
-        if (Year <= 0)
+        if (string.IsNullOrWhiteSpace(Year))
             throw new Exception("Year is required");
     }
 
