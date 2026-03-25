@@ -1,12 +1,15 @@
 using Lab_2.Contracts;
+using Lab_2.Domain;
+
 namespace Lab_2.Services;
+
 /// <summary>
-/// handles authentiication logic (login/logout)
+/// handles authentication logic (login/logout)
 /// </summary>
-public class AuthService : IAuthService
+public class AuthService : IAuthServiceRepository
 {
     private readonly IMemberRepository _memberRepository;
-    private string _currentMemberId;
+    private string? _currentMemberId;
 
     /// <summary>
     /// initializes auth service
@@ -25,16 +28,16 @@ public class AuthService : IAuthService
     public bool Login(string accountId)
     {
         var member = _memberRepository.GetByAccount(accountId);
-        if (member == null) return false;
-        
-        _currentMemberId = accountId;
+        if (member == null)
+            return false;
+
+        _currentMemberId = member.AccountId;
         return true;
     }
 
     /// <summary>
     /// logs out member
     /// </summary>
-    /// <returns></returns>
     public void Logout()
     {
         _currentMemberId = null;
@@ -48,12 +51,12 @@ public class AuthService : IAuthService
     {
         return _currentMemberId != null;
     }
-    
+
     /// <summary>
     /// gets id of member logged in
     /// </summary>
     /// <returns></returns>
-    public string GetCurrentMemberId()
+    public string? CurrentMemberId()
     {
         return _currentMemberId;
     }

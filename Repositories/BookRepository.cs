@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Lab_2.Contracts;
+using Lab_2.Domain;
 
 namespace Lab_2.Repositories;
 
 public class BookRepository : IBookRepository
 {
-    private List<Book> books = new List<Book>();
+    private readonly List<Book> books = new List<Book>();
 
     public void AddBook(Book book)
     {
@@ -20,7 +22,7 @@ public class BookRepository : IBookRepository
         return books;
     }
 
-    public Book GetByISBN(string isbn)
+    public Book? GetByISBN(string isbn)
     {
         foreach (var b in books)
         {
@@ -30,6 +32,11 @@ public class BookRepository : IBookRepository
             }
         }
 
-        return null; // not found
+        return null;
+    }
+
+    public int Count()
+    {
+        return books.Count;
     }
 }

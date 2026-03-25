@@ -3,3 +3,13 @@
 /Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.AssemblyInfo.cs
 /Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.csproj.CoreCompileInputs.cache
 /Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.sourcelink.json
+/Users/sogolmaghzian/Documents/Lab_2/bin/Debug/net8.0/Lab_2
+/Users/sogolmaghzian/Documents/Lab_2/bin/Debug/net8.0/Lab_2.deps.json
+/Users/sogolmaghzian/Documents/Lab_2/bin/Debug/net8.0/Lab_2.runtimeconfig.json
+/Users/sogolmaghzian/Documents/Lab_2/bin/Debug/net8.0/Lab_2.dll
+/Users/sogolmaghzian/Documents/Lab_2/bin/Debug/net8.0/Lab_2.pdb
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.dll
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/refint/Lab_2.dll
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.pdb
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/Lab_2.genruntimeconfig.cache
+/Users/sogolmaghzian/Documents/Lab_2/obj/Debug/net8.0/ref/Lab_2.dll

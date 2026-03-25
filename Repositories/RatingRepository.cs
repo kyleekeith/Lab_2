@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Lab_2.Contracts;
+using Lab_2.Domain;
 
 namespace Lab_2.Repositories;
 
 public class RatingRepository : IRatingRepository
 {
-    private List<Rating> ratings = new List<Rating>();
+    private readonly List<Rating> ratings = new List<Rating>();
 
     public void Add(Rating rating)
     {
-        if(rating == null)
+        if (rating == null)
             throw new ArgumentNullException(nameof(rating));
+
         ratings.Add(rating);
     }
 
@@ -19,7 +22,7 @@ public class RatingRepository : IRatingRepository
         return ratings;
     }
 
-	public List<Rating> GetByMember(string memberId)
+    public List<Rating> GetByMember(string memberId)
     {
         List<Rating> memberRatings = new List<Rating>();
 
@@ -34,11 +37,24 @@ public class RatingRepository : IRatingRepository
         return memberRatings;
     }
 
+    public Rating? GetByMemberAndBook(string memberId, string isbn)
+    {
+        foreach (var rating in ratings)
+        {
+            if (rating.MemberId == memberId && rating.ISBN == isbn)
+            {
+                return rating;
+            }
+        }
+
+        return null;
+    }
+
     public RatingValue GetValue(string memberId, string isbn)
     {
         foreach (var rating in ratings)
         {
-            if (rating.MemberId == memberId && rating.BookIsbn == isbn)
+            if (rating.MemberId == memberId && rating.ISBN == isbn)
             {
                 return rating.Value;
             }
@@ -51,12 +67,31 @@ public class RatingRepository : IRatingRepository
     {
         foreach (var rating in ratings)
         {
-            if (rating.MemberId == memberId && rating.BookIsbn == isbn)
+            if (rating.MemberId == memberId && rating.ISBN == isbn)
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public void Update(string memberId, string isbn, RatingValue value)
+    {
+        for (int i = 0; i < ratings.Count; i++)
+        {
+            if (ratings[i].MemberId == memberId && ratings[i].ISBN == isbn)
+            {
+                ratings[i] = new Rating(memberId, isbn, value);
+                return;
+            }
+        }
+
+        throw new KeyNotFoundException("Rating not found.");
+    }
+
+    public int Count()
+    {
+        return ratings.Count;
     }
 }

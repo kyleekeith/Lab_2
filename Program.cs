@@ -20,11 +20,10 @@ namespace Lab_2
         private static readonly IAuthServiceRepository authService = new AuthService(memberRepo);
 
         private static readonly RecommendationService recommendationService =
-            new RecommendationService(ratingRepo, bookRepo, memberRepo);
-
+            new RecommendationService(ratingRepo, bookRepo);
         private static readonly AverageRatingRecommender averageRatingRecommender =
-            new AverageRatingRecommender(bookRepo, ratingRepo);
-
+            new AverageRatingRecommender(ratingRepo, bookRepo);
+        
         /// <summary>
         /// Starts the program and loads book and rating files.
         /// </summary>
@@ -201,8 +200,12 @@ namespace Lab_2
             Console.Write("Enter the title of the new book: ");
             string title = Console.ReadLine() ?? "";
 
-            Console.Write("Enter the year (or range of years) of the new book: ");
-            string year = Console.ReadLine() ?? "";
+            Console.Write("Enter the year of the new book: ");
+            int year;
+            while (!int.TryParse(Console.ReadLine(), out year))
+            {
+                Console.Write("Invalid year. Enter a number: ");
+            }
 
             string isbn = GenerateNextBookId();
             var book = new Book(isbn, author, title, year);
@@ -210,7 +213,7 @@ namespace Lab_2
 
             foreach (var member in memberRepo.GetAll())
             {
-                ratingRepo.Add(new Rating(member.Account.ToString(), isbn, RatingValue.NotRead));
+                ratingRepo.Add(new Rating(member.AccountId, isbn, RatingValue.NotRead));
             }
 
             Console.WriteLine($"{isbn}, {author}, {title}, {year} was added.");
@@ -269,7 +272,14 @@ namespace Lab_2
                 Console.Write("Invalid rating. Enter -5, -3, 0, 1, 3, or 5: ");
             }
 
-            ratingRepo.Add(new Rating(memberId, isbn, (RatingValue)ratingInput));
+            if (ratingRepo.HasRating(memberId, isbn))
+            {
+                ratingRepo.Update(memberId, isbn, (RatingValue)ratingInput);
+            }
+            else
+            {
+                ratingRepo.Add(new Rating(memberId, isbn, (RatingValue)ratingInput));
+            }
 
             Console.WriteLine($"Your new rating for {book.ISBN}, {book.Author}, {book.Title}, {book.Year} => rating: {ratingInput}");
         }
@@ -296,7 +306,7 @@ namespace Lab_2
                 .Select(book => new
                 {
                     Book = book,
-                    SimilarMemberRating = ratingRepo.GetValue(mostSimilarMember.Account.ToString(), book.ISBN)
+                    SimilarMemberRating = ratingRepo.GetValue(mostSimilarMember.AccountId, book.ISBN)
                 })
                 .Where(x => x.SimilarMemberRating == RatingValue.Love ||
                             x.SimilarMemberRating == RatingValue.Like ||
@@ -338,7 +348,7 @@ namespace Lab_2
 
             foreach (var otherMember in memberRepo.GetAll())
             {
-                if (otherMember.Account.ToString() == memberId)
+                if (otherMember.AccountId == memberId)
                     continue;
 
                 int similarity = 0;
@@ -346,7 +356,7 @@ namespace Lab_2
                 foreach (var book in bookRepo.GetAll())
                 {
                     int myRating = (int)ratingRepo.GetValue(memberId, book.ISBN);
-                    int otherRating = (int)ratingRepo.GetValue(otherMember.Account.ToString(), book.ISBN);
+                    int otherRating = (int)ratingRepo.GetValue(otherMember.AccountId, book.ISBN);
                     similarity += myRating * otherRating;
                 }
 
@@ -386,7 +396,9 @@ namespace Lab_2
 
                 string author = parts[0].Trim();
                 string title = parts[1].Trim();
-                string year = parts[2].Trim();
+                int year;
+                if (!int.TryParse(parts[2].Trim(), out year))
+                    continue;
 
                 string isbn = GenerateNextBookId();
                 var book = new Book(isbn, author, title, year);
